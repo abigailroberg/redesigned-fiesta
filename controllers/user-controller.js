@@ -60,6 +60,14 @@ const userController = {
             { $push: { friends: params.friendId } },
             { new: true }
         )
+        // add user to friend friends - this doesn't work but ??
+        .then(
+            User.findOneAndUpdate(
+                { _id: params.friendId },
+                { $push: { friends: params.id } },
+                { new: true }
+            )
+        )
         .then(dbUserData => {
             if (!dbUserData) {
                 res.status(404).json({ message: 'No user found with this id!' })
@@ -70,8 +78,20 @@ const userController = {
         .catch(err => res.json(err))
     },
     // delete friend from user
-    deleteFriend() {
-        console.log('delete friend method')
+    deleteFriend({ params }, res) {
+        User.findOneAndUpdate(
+            { _id: params.id },
+            { $pull: { friends: params.friendId } },
+            { new: true }
+        )
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(404).json({ message: 'No user found with this id!' })
+                return
+            }
+            res.json(dbUserData)
+        })
+        .catch(err => res.json(err))
     }
 }
 
