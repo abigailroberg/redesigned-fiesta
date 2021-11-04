@@ -4,6 +4,10 @@ const userController = {
     // get all users
     getAllUsers(req, res) {
         User.find({})
+            .populate({
+                path: 'friends',
+                select: '-__v'
+            })
             .select('-__v')
             .then(dbUserData => res.json(dbUserData))
             .catch(err => res.status(400).json(err))
@@ -11,6 +15,10 @@ const userController = {
     // get single user by id
     getUserById({ params }, res) {
         User.findOne({ _id: params.id })
+            .populate({
+                path: 'friends',
+                select: '-__v'
+            })
             .select('-__v')
             .then(dbUserData => res.json(dbUserData))
             .catch(err => res.status(400).json(err))
