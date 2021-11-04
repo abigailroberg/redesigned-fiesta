@@ -1,5 +1,26 @@
 const { Schema, model, Types } = require('mongoose')
-const { replaceOne } = require('./User')
+
+const reactionSchema = new Schema({
+    // set custom id
+    reactionId: {
+        type: Schema.Types.ObjectId,
+        default: () => new Types.ObjectId
+    },
+    reactionBody: {
+        type: String,
+        required: 'Please enter something for your reaction!',
+        maxlength: 280
+    },
+    username: {
+        type: String,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        get: (createdAtVal) => dateFormat(createdAtVal)
+    }
+})
 
 const ThoughtSchema = new Schema({
     thoughtText: {
@@ -25,28 +46,6 @@ const ThoughtSchema = new Schema({
         virtuals: true
     },
     id: false
-})
-
-const reactionSchema = new Schema({
-    // set custom id
-    reactionId: {
-        type: Schema.Types.ObjectId,
-        default: () => new Types.ObjectId
-    },
-    reactionBody: {
-        type: String,
-        required: 'Please enter something for your reaction!',
-        maxlength: 280
-    },
-    username: {
-        type: String,
-        required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-        get: (createdAtVal) => dateFormat(createdAtVal)
-    }
 })
 
 // reaction count virtual
