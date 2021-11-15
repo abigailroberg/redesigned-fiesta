@@ -1,4 +1,5 @@
 const User = require('../models/User.js')
+const Thought = require('../models/Thought.js')
 
 const userController = {
     // get all users
@@ -100,6 +101,11 @@ const userController = {
             res.json(dbUserData)
         })
         .catch(err => res.json(err))
+    },
+    // delete all users
+    deleteAll(req, res) {
+        User.deleteMany({})
+        .then(res.json({ message: 'database cleared' }))
     }
 }
 
