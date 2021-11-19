@@ -46,10 +46,21 @@ const thoughtController = {
             })
             .catch(err => res.json(err))
     },
+    deleteThought({params}, res) {
+        Thought.findOneAndDelete({ _id: params.id })
+        .then(dbThoughtData => {
+            if (!dbThoughtData) {
+                res.status(404).json({ message: 'No thought with that id' })
+                return
+            }
+            res.json({ message: 'Deleted!' })
+        })
+        .catch(err => res.json(err))
+    },
     // delete all thoughts
     deleteAll(req, res) {
         Thought.deleteMany({})
-        .then(res.json({ message: 'database cleared' }))
+        .then(res.json({ message: 'thoughts cleared' }))
     }   
 }
 
