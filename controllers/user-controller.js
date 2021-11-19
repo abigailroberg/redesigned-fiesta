@@ -1,5 +1,4 @@
 const User = require('../models/User.js')
-const Thought = require('../models/Thought.js')
 
 const userController = {
     // get all users
@@ -69,15 +68,8 @@ const userController = {
             { $push: { friends: params.friendId } },
             { new: true }
         )
-        // add user to friend friends - this doesn't work but ??
-        .then(
-            User.findOneAndUpdate(
-                { _id: params.friendId },
-                { $push: { friends: params.id } },
-                { new: true }
-            )
-        )
         .then(dbUserData => {
+            console.log(dbUserData)
             if (!dbUserData) {
                 res.status(404).json({ message: 'No user found with this id!' })
                 return
