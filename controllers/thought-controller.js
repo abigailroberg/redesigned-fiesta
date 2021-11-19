@@ -61,7 +61,23 @@ const thoughtController = {
     deleteAll(req, res) {
         Thought.deleteMany({})
         .then(res.json({ message: 'thoughts cleared' }))
-    }   
+    },
+    // add a reaction to a thought
+    addReaction({params, body}, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.id},
+            { $push: { reactions: body } },
+            { new: true }
+        )
+        .then(dbThoughtData => {
+            if (!dbThoughtData) {
+                res.status(404).json({ message: 'No thought with that id' })
+                return
+            }
+            res.json(dbThoughtData)
+        })
+        .catch(err => res.json(err))
+    }  
 }
 
 module.exports = thoughtController
